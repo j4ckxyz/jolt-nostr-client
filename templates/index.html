@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TwHIN-BERT Demo - Tweet Similarity Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #15202b;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #1e2732;
+            padding: 20px;
+            border-bottom: 1px solid #38444d;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1da1f2;
+        }
+
+        .subtitle {
+            color: #8899a6;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+        }
+
+        .compose-box {
+            background: #1e2732;
+            border: 1px solid #38444d;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            background: #253341;
+            border: 1px solid #38444d;
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #1da1f2;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: #253341;
+            border: 1px solid #38444d;
+            border-radius: 8px;
+            color: #fff;
+            padding: 10px 12px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #1da1f2;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            background: #1da1f2;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1a8cd8;
+        }
+
+        button:disabled {
+            background: #38444d;
+            cursor: not-allowed;
+        }
+
+        .tweet {
+            background: #1e2732;
+            border: 1px solid #38444d;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            position: relative;
+        }
+
+        .tweet:hover {
+            background: #1c2632;
+            border-color: #1da1f2;
+        }
+
+        .tweet.selected {
+            border-color: #1da1f2;
+            border-width: 2px;
+        }
+
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1da1f2, #14a76c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .tweet-author {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .tweet-username {
+            color: #8899a6;
+            margin-left: 5px;
+        }
+
+        .tweet-text {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .tweet-meta {
+            display: flex;
+            gap: 15px;
+            color: #8899a6;
+            font-size: 13px;
+        }
+
+        .topic-badge {
+            background: #1e3a5f;
+            color: #1da1f2;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .similarity-score {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #1da1f2;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-box {
+            background: #1e2732;
+            border: 1px solid #38444d;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .similar-tweet {
+            padding: 12px;
+            background: #253341;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .similar-tweet-text {
+            margin-bottom: 8px;
+        }
+
+        .similarity-bar {
+            height: 4px;
+            background: #38444d;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .similarity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1da1f2, #14a76c);
+            transition: width 0.3s;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #8899a6;
+        }
+
+        .algorithm-info {
+            background: #1e3a5f;
+            border: 1px solid #1da1f2;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .embedding-preview {
+            background: #253341;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #8899a6;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🐦 TwHIN-BERT Tweet Similarity Explorer</h1>
+            <p class="subtitle">Explore how Twitter's socially-enriched language model finds relevant tweets using embeddings</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-layout">
+            <div class="main-content">
+                <div class="compose-box">
+                    <h2 style="margin-bottom: 15px; font-size: 18px;">Compose a Tweet</h2>
+                    <input type="text" id="authorInput" placeholder="Your name (optional)" value="You">
+                    <textarea id="tweetInput" placeholder="What's happening? Try something about sports, tech, or food!"></textarea>
+                    <div class="button-group">
+                        <button onclick="analyzeTweet()">🔍 Analyze Similarity</button>
+                        <button onclick="postTweet()">📤 Post Tweet</button>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom: 15px; font-size: 20px;">Tweet Feed</h2>
+                <div id="tweetFeed" class="loading">Loading tweets...</div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-box">
+                    <div class="sidebar-title">🧠 How It Works</div>
+                    <div class="algorithm-info">
+                        <strong>TwHIN-BERT Algorithm:</strong><br>
+                        1. Converts tweets into 768-dimensional embeddings<br>
+                        2. Uses cosine similarity to measure relevance<br>
+                        3. Similar topics = closer embeddings = higher scores<br>
+                        4. Click any tweet to see its most similar matches!
+                    </div>
+                </div>
+
+                <div class="sidebar-box" id="similarityBox" style="display: none;">
+                    <div class="sidebar-title">🎯 Most Similar Tweets</div>
+                    <div id="similarTweets"></div>
+                </div>
+
+                <div class="sidebar-box" id="analysisBox" style="display: none;">
+                    <div class="sidebar-title">📊 Live Analysis</div>
+                    <div id="analysisResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTweets = [];
+        let selectedTweetId = null;
+
+        async function loadTweets() {
+            try {
+                const response = await fetch('/api/tweets');
+                currentTweets = await response.json();
+                renderTweets(currentTweets);
+            } catch (error) {
+                document.getElementById('tweetFeed').innerHTML = '<p style="color: #ff6b6b;">Error loading tweets</p>';
+            }
+        }
+
+        function renderTweets(tweets) {
+            const feed = document.getElementById('tweetFeed');
+            if (tweets.length === 0) {
+                feed.innerHTML = '<p style="color: #8899a6; text-align: center;">No tweets yet. Be the first to post!</p>';
+                return;
+            }
+
+            feed.innerHTML = tweets.map(tweet => `
+                <div class="tweet ${selectedTweetId === tweet.id ? 'selected' : ''}" onclick="selectTweet(${tweet.id})">
+                    <div class="tweet-header">
+                        <div class="avatar">${tweet.author.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <span class="tweet-author">${tweet.author}</span>
+                            <span class="tweet-username">@${tweet.author.toLowerCase().replace(/\s/g, '')}</span>
+                        </div>
+                    </div>
+                    <div class="tweet-text">${tweet.text}</div>
+                    <div class="tweet-meta">
+                        ${tweet.topic ? `<span class="topic-badge">#${tweet.topic}</span>` : ''}
+                        <span>${formatTime(tweet.timestamp)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function selectTweet(tweetId) {
+            selectedTweetId = tweetId;
+            renderTweets(currentTweets);
+            
+            document.getElementById('analysisBox').style.display = 'none';
+            document.getElementById('similarityBox').style.display = 'block';
+            document.getElementById('similarTweets').innerHTML = '<div class="loading">Finding similar tweets...</div>';
+
+            try {
+                const response = await fetch(`/api/similar/${tweetId}`);
+                const similar = await response.json();
+                renderSimilarTweets(similar);
+            } catch (error) {
+                document.getElementById('similarTweets').innerHTML = '<p style="color: #ff6b6b;">Error loading similar tweets</p>';
+            }
+        }
+
+        function renderSimilarTweets(tweets) {
+            const container = document.getElementById('similarTweets');
+            
+            if (tweets.length === 0) {
+                container.innerHTML = '<p style="color: #8899a6;">No similar tweets found</p>';
+                return;
+            }
+
+            container.innerHTML = tweets.map(tweet => `
+                <div class="similar-tweet">
+                    <div class="similar-tweet-text"><strong>@${tweet.author}:</strong> ${tweet.text.substring(0, 100)}${tweet.text.length > 100 ? '...' : ''}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                        <span style="font-size: 12px; color: #8899a6;">Similarity: ${(tweet.similarity * 100).toFixed(1)}%</span>
+                        ${tweet.topic ? `<span class="topic-badge">#${tweet.topic}</span>` : ''}
+                    </div>
+                    <div class="similarity-bar">
+                        <div class="similarity-fill" style="width: ${tweet.similarity * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function analyzeTweet() {
+            const text = document.getElementById('tweetInput').value.trim();
+            if (!text) {
+                alert('Please enter some text to analyze!');
+                return;
+            }
+
+            document.getElementById('similarityBox').style.display = 'none';
+            document.getElementById('analysisBox').style.display = 'block';
+            document.getElementById('analysisResult').innerHTML = '<div class="loading">Analyzing with Gemini API...</div>';
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                const result = await response.json();
+                
+                let html = '<div style="margin-bottom: 15px;">';
+                html += '<strong>Your tweet would be similar to:</strong>';
+                html += '</div>';
+                
+                result.similar_tweets.slice(0, 5).forEach(tweet => {
+                    html += `
+                        <div class="similar-tweet">
+                            <div class="similar-tweet-text"><strong>@${tweet.author}:</strong> ${tweet.text}</div>
+                            <div style="margin-top: 5px;">
+                                <span style="font-size: 12px; color: #8899a6;">Match: ${(tweet.similarity * 100).toFixed(1)}%</span>
+                            </div>
+                            <div class="similarity-bar">
+                                <div class="similarity-fill" style="width: ${tweet.similarity * 100}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '<div style="margin-top: 15px; font-size: 12px; color: #8899a6;">';
+                html += '<strong>Embedding Preview (first 10 dims):</strong>';
+                html += `<div class="embedding-preview">[${result.embedding_preview.map(v => v.toFixed(4)).join(', ')}...]</div>`;
+                html += '</div>';
+
+                document.getElementById('analysisResult').innerHTML = html;
+            } catch (error) {
+                document.getElementById('analysisResult').innerHTML = '<p style="color: #ff6b6b;">Error analyzing tweet</p>';
+            }
+        }
+
+        async function postTweet() {
+            const text = document.getElementById('tweetInput').value.trim();
+            const author = document.getElementById('authorInput').value.trim() || 'Anonymous';
+            
+            if (!text) {
+                alert('Please enter some text to post!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/tweet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, author })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('tweetInput').value = '';
+                    loadTweets();
+                    alert('Tweet posted successfully! 🎉');
+                } else {
+                    alert('Error posting tweet');
+                }
+            } catch (error) {
+                alert('Error posting tweet');
+            }
+        }
+
+        function formatTime(timestamp) {
+            if (!timestamp) return 'just now';
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return `${diff}s`;
+            if (diff < 3600) return `${Math.floor(diff / 60)}m`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+            return date.toLocaleDateString();
+        }
+
+        loadTweets();
+    </script>
+</body>
+</html>
