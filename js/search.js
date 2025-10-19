@@ -11,7 +11,8 @@ import {
     getFollowList,
     publishReaction,
     getReactionCount,
-    hasUserReacted
+    hasUserReacted,
+    getPrivateKeyFromNsec
 } from './nostr.js';
 
 import { shouldDisplayEvent } from './filters.js';
@@ -314,13 +315,15 @@ document.addEventListener('click', async (e) => {
         const following = userFollowList.includes(pubkey);
         
         try {
+            const privateKey = getPrivateKeyFromNsec(keys.nsec);
+            
             if (following) {
-                await unfollowUser(pubkey);
+                await unfollowUser(privateKey, pubkey);
                 userFollowList = userFollowList.filter(p => p !== pubkey);
                 e.target.textContent = 'Follow';
                 e.target.style.background = '#ff6600';
             } else {
-                await followUser(pubkey);
+                await followUser(privateKey, pubkey);
                 userFollowList.push(pubkey);
                 e.target.textContent = 'Unfollow';
                 e.target.style.background = '#ccc';

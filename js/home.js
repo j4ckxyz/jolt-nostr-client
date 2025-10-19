@@ -424,7 +424,7 @@ function switchTab(tab) {
 
 async function loadRecommendedUsers() {
     try {
-        const response = await fetch('http://localhost:3000/api/recommended-users');
+        const response = await fetch('/api/recommended-users');
         const data = await response.json();
         
         const container = document.getElementById('recommended-users-list');
