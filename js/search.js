@@ -15,7 +15,7 @@ import {
 } from './nostr.js';
 
 import { shouldDisplayEvent } from './filters.js';
-import { SimplePool } from 'https://esm.sh/nostr-tools@2.7.2';
+import { SimplePool, nip19 } from 'https://esm.sh/nostr-tools@2.7.2';
 import { nip05 } from 'https://esm.sh/nostr-tools@2.7.2';
 
 const keys = getKeysFromStorage();
@@ -195,6 +195,7 @@ function renderUserCard(pubkey, metadata) {
     const about = metadata.about || '';
     const picture = metadata.picture || `https://api.dicebear.com/7.x/identicon/svg?seed=${pubkey}`;
     const nip05 = metadata.nip05 || '';
+    const npub = nip19.npubEncode(pubkey);
     
     const following = userFollowList.includes(pubkey);
     
@@ -205,7 +206,7 @@ function renderUserCard(pubkey, metadata) {
                 <div style="flex: 1;">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
                         <div>
-                            <strong><a href="profile.html?npub=${pubkey}" style="color: #ff6600;">${name}</a></strong>
+                            <strong><a href="profile.html?npub=${npub}" style="color: #ff6600;">${name}</a></strong>
                             ${nip05 ? `<div style="font-size: 10px; color: #666;">✓ ${nip05}</div>` : ''}
                         </div>
                         <button 
