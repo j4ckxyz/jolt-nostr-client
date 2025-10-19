@@ -22,7 +22,7 @@ const pool = new SimplePool();
 
 let joltPostsCache = [];
 let lastCacheUpdate = 0;
-const CACHE_TTL = 60000;
+const CACHE_TTL = 30000;
 
 const userTimelineCache = new Map();
 const metadataCache = new Map();
@@ -168,11 +168,11 @@ async function fetchJoltPosts() {
     }
 }
 
+fetchJoltPosts();
+
 setInterval(() => {
     fetchJoltPosts();
 }, CACHE_TTL);
-
-fetchJoltPosts();
 
 const server = http.createServer(async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -200,16 +200,17 @@ const server = http.createServer(async (req, res) => {
     
     if (req.url === '/api/spark-posts') {
         res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Cache-Control', 'public, max-age=30');
+        res.setHeader('Cache-Control', 'public, max-age=15');
         
-        if (Date.now() - lastCacheUpdate > CACHE_TTL) {
+        if (joltPostsCache.length === 0 || Date.now() - lastCacheUpdate > CACHE_TTL) {
             await fetchJoltPosts();
         }
         
         res.writeHead(200);
         res.end(JSON.stringify({
             posts: joltPostsCache,
-            cached_at: lastCacheUpdate
+            cached_at: lastCacheUpdate,
+            count: joltPostsCache.length
         }));
         return;
     }

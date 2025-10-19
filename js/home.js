@@ -388,9 +388,10 @@ async function loadTimeline() {
             });
             
             document.getElementById('timeline-loading').style.display = 'none';
+            return;
         }
     } catch (error) {
-        console.log('Server cache not available, loading from relays:', error);
+        console.log('Server cache not available, falling back to relays:', error);
     }
     
     subscription = await subscribeToNotes((event) => {
