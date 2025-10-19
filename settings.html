@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="home.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="home.html">Home</a>
+                <a href="search.html">Search</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="profile.html">Profile</a>
+                <a href="settings.html" class="active">Settings</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <h2>Settings</h2>
+                
+                <div class="settings-section">
+                    <h3>Timeline Filters</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="filter-spark-client">
+                            Show only Jolt posts
+                        </label>
+                        <p style="font-size: 10px; color: #666; margin-top: 4px;">
+                            When enabled, only posts made from Jolt will appear in your timeline.
+                        </p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="filter-replies" checked>
+                            Hide replies in timeline
+                        </label>
+                        <p style="font-size: 10px; color: #666; margin-top: 4px;">
+                            Only shows original posts, not replies. Note: Only Jolt replies are shown when unchecked.
+                        </p>
+                    </div>
+                    
+                    <button id="save-filters-btn" class="btn-primary">Save Filter Settings</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>⚠️ Beta Features</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="show-all-nostr">
+                            Show ALL Nostr posts (Not Recommended)
+                        </label>
+                        <p style="font-size: 10px; color: #ff6600; margin-top: 4px;">
+                            <strong>Warning:</strong> This will show unfiltered content from across the entire Nostr network, including crypto spam, NSFW, and other content. Only enable if you know what you're doing.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Data Usage</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="low-data-mode">
+                            Enable Low Data Mode
+                        </label>
+                        <p style="font-size: 10px; color: #666; margin-top: 4px;">
+                            Reduces bandwidth usage: images load only when clicked, fewer background requests, and optimized caching.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Media & Embeds</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="show-images" checked>
+                            Show inline images
+                        </label>
+                        <p style="font-size: 10px; color: #666; margin-top: 4px;">
+                            Automatically display images from URLs in posts. (Disabled in Low Data Mode)
+                        </p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="show-youtube-embeds" checked>
+                            Show YouTube embeds
+                        </label>
+                        <p style="font-size: 10px; color: #666; margin-top: 4px;">
+                            Embed YouTube videos directly in posts.
+                        </p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="show-twitter-embeds" checked>
+                            Show Twitter/X embeds
+                        </label>
+                        <p style="font-size: 10px; color: #666; margin-top: 4px;">
+                            Show Twitter/X post previews in timeline.
+                        </p>
+                    </div>
+                    
+                    <button id="save-media-btn" class="btn-primary">Save Media Settings</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Advanced</h3>
+                    <div class="form-group">
+                        <label>Nostr Relays</label>
+                        <p style="font-size: 10px; color: #666; margin-bottom: 8px;">
+                            Add custom Nostr relays (one per line). These are used to fetch and publish your posts.
+                        </p>
+                        <textarea id="custom-relays" rows="6" style="width: 100%; font-family: monospace; font-size: 11px;"></textarea>
+                        <button id="save-relays-btn" class="btn-small" style="margin-top: 5px;">Save Relays</button>
+                        <button id="reset-relays-btn" class="btn-small" style="margin-top: 5px;">Reset to Defaults</button>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3>Account</h3>
+                    <p style="font-size: 11px; color: #666; margin-bottom: 10px;">
+                        Your Jolt account is powered by Nostr. Your keys work across all Nostr apps.
+                    </p>
+                    <a href="profile.html" class="btn-primary">View Your Profile</a>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>About Settings</h4>
+                    <p>Customize your Jolt experience. Changes are saved locally to your browser.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="home.html">Home</a> · 
+            <a href="#about">About</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/settings.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="home.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="home.html" class="active">Home</a>
+                <a href="search.html">Search</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="#" id="profile-link">Profile</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="post-box">
+                    <h3>What are you doing?</h3>
+                    <form id="post-form">
+                        <textarea id="post-text" name="post" rows="2" maxlength="140" placeholder="Share what's happening..."></textarea>
+                        <div id="image-preview" style="display: none; margin: 10px 0;">
+                            <img id="preview-img" src="" alt="" style="max-width: 100%; max-height: 200px; border: 1px solid #ccc;">
+                            <button type="button" id="remove-image-btn" class="btn-small" style="margin-top: 5px;">Remove Image</button>
+                            <div style="margin-top: 5px;">
+                                <label style="font-size: 11px;">Alt text (optional):</label>
+                                <input type="text" id="image-alt-text" maxlength="100" style="width: 100%; font-size: 11px;" placeholder="Describe this image">
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <div>
+                                <button type="button" id="upload-image-btn" class="btn-small">📷 Add Image</button>
+                                <input type="file" id="image-file-input" accept="image/*" style="display: none;">
+                            </div>
+                            <div>
+                                <span id="char-count">140</span>
+                                <button type="submit" class="btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-tabs">
+                        <button class="tab-btn active" data-tab="all">All</button>
+                        <button class="tab-btn" data-tab="following">Following</button>
+                    </div>
+                    <div id="timeline-loading">Loading sparks...</div>
+                    <div id="timeline"></div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="profile-box">
+                    <div id="user-info">
+                        <img id="user-avatar" src="" alt="Avatar" class="avatar">
+                        <div class="user-details">
+                            <strong id="user-name">Loading...</strong>
+                            <div class="user-stats">
+                                <a href="#" id="view-profile-link"><strong id="following-count">0</strong> Following</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Search Users</h4>
+                    <div style="margin-bottom: 10px;">
+                        <input type="text" id="user-search" placeholder="Search by name..." style="width: 100%; padding: 5px; font-size: 11px;">
+                    </div>
+                    <div id="search-results"></div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Recommended Users</h4>
+                    <div id="recommended-users-list" style="font-size: 11px;">
+                        <div style="text-align: center; padding: 10px;">Loading...</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Quick Links</h4>
+                    <p style="font-size: 11px; margin-bottom: 8px;">
+                        <a href="settings.html">⚙️ Settings</a><br>
+                        <a href="help.html">❓ Help</a><br>
+                        <a href="profile.html" id="sidebar-profile-link">👤 Your Profile</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="#about">About</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/home.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

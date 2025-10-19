@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="index.html">Jolt</a></h1>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="signup-container">
+                    <h2>Join Jolt</h2>
+                    
+                    <div id="step1" class="signup-step active">
+                        <h3>Step 1: Generate Your Keys</h3>
+                        <p>Jolt uses cryptographic keys instead of passwords. Your keys are generated locally and never leave your device.</p>
+                        <button id="generate-keys-btn" class="btn-primary">Generate My Keys</button>
+                    </div>
+                    
+                    <div id="step2" class="signup-step" style="display: none;">
+                        <h3>Step 2: Save Your Private Key</h3>
+                        <div class="warning-box">
+                            <strong>⚠️ IMPORTANT - READ CAREFULLY</strong>
+                            <p>Your private key (nsec) is like a password that CANNOT be reset. If you lose it, you lose access to your account forever.</p>
+                            <ul>
+                                <li>Save it in a password manager</li>
+                                <li>Write it down on paper and store it safely</li>
+                                <li>NEVER share it with anyone</li>
+                                <li>We cannot recover it if you lose it</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="key-display">
+                            <label>Your Private Key (nsec) - KEEP THIS SECRET:</label>
+                            <div class="key-box">
+                                <input type="text" id="nsec-display" readonly>
+                                <button id="copy-nsec-btn" class="btn-small">Copy</button>
+                            </div>
+                        </div>
+                        
+                        <div class="key-display">
+                            <label>Your Public Key (npub) - Safe to share:</label>
+                            <div class="key-box">
+                                <input type="text" id="npub-display" readonly>
+                                <button id="copy-npub-btn" class="btn-small">Copy</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="confirm-saved">
+                                I have saved my private key in a safe place
+                            </label>
+                        </div>
+                        
+                        <button id="continue-btn" class="btn-primary" disabled>Continue to Profile Setup</button>
+                    </div>
+                    
+                    <div id="step3" class="signup-step" style="display: none;">
+                        <h3>Step 3: Set Up Your Profile</h3>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="username">Display Name:</label>
+                                <input type="text" id="username" name="username" maxlength="50" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="about">About (optional):</label>
+                                <textarea id="about" name="about" rows="3" maxlength="160"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-picture">Profile Picture (optional):</label>
+                                <input type="file" id="profile-picture" accept="image/*">
+                                <div id="profile-pic-preview" style="display: none; margin-top: 10px;">
+                                    <img id="preview-avatar" src="" alt="Preview" style="width: 96px; height: 96px; border: 1px solid #ccc;">
+                                    <button type="button" id="remove-avatar-btn" class="btn-small" style="margin-top: 5px;">Remove</button>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">Create My Account</button>
+                            <div id="profile-upload-status" style="margin-top: 10px; font-size: 11px; color: #666;"></div>
+                        </form>
+                    </div>
+                    
+                    <div id="step4" class="signup-step" style="display: none;">
+                        <h3>🎉 Welcome to Jolt!</h3>
+                        <p>Your account has been created successfully.</p>
+                        <a href="home.html" class="btn-primary">Start Jolting</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>Why Keys?</h4>
+                    <p>Jolt uses the Nostr protocol, which gives you true ownership of your identity. Your keys work across all Nostr apps, and no company can take your account away.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="index.html">Back to Home</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/signup.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

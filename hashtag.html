@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashtag - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="home.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="home.html">Home</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="profile.html">Profile</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="timeline">
+                    <h3 id="hashtag-title">Loading...</h3>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="show-all-toggle" style="margin-right: 8px;">
+                            Show all Nostr content (not just Jolt)
+                        </label>
+                    </div>
+                    <div id="timeline-loading">Loading posts...</div>
+                    <div id="timeline"></div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>About Hashtags</h4>
+                    <p>Browse posts tagged with <span id="hashtag-name"></span>. Toggle to see all Nostr content or just Jolts.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="home.html">Home</a> · 
+            <a href="#about">About</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/hashtag.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

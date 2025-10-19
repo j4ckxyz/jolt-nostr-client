@@ -1,0 +1,30 @@
+.env
+node_modules/
+*.log
+.DS_Store
+dist/
+build/
+.vercel
+.netlify
+
+# Private server data
+jolt-signups.json
+jolt-blacklist.json
+server.log
+test-*.js
+
+# User-specific filter data (not to be committed)
+mute-words.json
+user-blacklist.json
+
+# Development
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.AppleDouble
+.LSOverride

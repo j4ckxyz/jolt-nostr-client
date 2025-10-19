@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="home.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="home.html">Home</a>
+                <a href="search.html">Search</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="profile.html">Profile</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="post-detail">
+                    <div id="post-loading">Loading spark...</div>
+                    <div id="main-post"></div>
+                    
+                    <div class="conversation">
+                        <h3>Conversation</h3>
+                        <div id="conversation-loading" style="display: none;">Loading conversation...</div>
+                        <div id="replies-list"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>Share This Jolt</h4>
+                    <input type="text" id="share-url" readonly style="width: 100%; font-size: 11px; margin-bottom: 5px;">
+                    <button id="copy-url-btn" class="btn-small">Copy Link</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="#about">About</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/post.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

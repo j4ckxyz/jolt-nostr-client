@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="home.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="home.html">Home</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="profile.html">Profile</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <h2>Search</h2>
+                
+                <div class="post-box">
+                    <form id="search-form">
+                        <input 
+                            type="text" 
+                            id="search-query" 
+                            placeholder="Search by name, npub, NIP-05, or bio..." 
+                            style="width: 100%; padding: 10px; font-size: 14px; margin-bottom: 10px;"
+                        >
+                        <button type="submit" class="btn-primary">Search</button>
+                    </form>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-tabs">
+                        <button class="tab-btn active" data-tab="users">Users</button>
+                        <button class="tab-btn" data-tab="sparks">Sparks</button>
+                    </div>
+                    
+                    <div id="users-tab-content">
+                        <div id="users-loading" style="display: none; text-align: center; padding: 20px;">Searching...</div>
+                        <div id="users-results"></div>
+                    </div>
+                    
+                    <div id="sparks-tab-content" style="display: none;">
+                        <div style="margin-bottom: 10px;">
+                            <label style="font-size: 12px;">
+                                <input type="checkbox" id="show-all-notes">
+                                Show all Nostr notes (not just Jolt)
+                            </label>
+                        </div>
+                        <div id="sparks-loading" style="display: none; text-align: center; padding: 20px;">Searching...</div>
+                        <div id="sparks-results"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>Search Tips</h4>
+                    <p style="font-size: 11px;">
+                        • Enter a name to find users<br>
+                        • Paste an npub to find a specific user<br>
+                        • Enter a NIP-05 address (user@domain.com)<br>
+                        • Search in bios with keywords<br>
+                        • Switch tabs to search Sparks
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="home.html">Home</a> · 
+            <a href="#about">About</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/search.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

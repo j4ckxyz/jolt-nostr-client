@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="home.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="home.html">Home</a>
+                <a href="search.html">Search</a>
+                <a href="notifications.html">Notifications</a>
+                <a href="profile.html" class="active">Profile</a>
+                <a href="settings.html">Settings</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="profile-header">
+                    <img id="profile-avatar" src="" alt="Avatar" class="profile-avatar-large">
+                    <div class="profile-info">
+                        <h2 id="profile-name">Loading...</h2>
+                        <div class="profile-meta">
+                            <div id="profile-bio"></div>
+                            <div class="profile-stats">
+                                <strong id="profile-following-count">0</strong> Following
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-key-box" id="profile-key-box">
+                    <strong>Your Public Key (npub):</strong>
+                    <div class="key-box">
+                        <input type="text" id="profile-npub" readonly>
+                        <button id="copy-npub-btn" class="btn-small">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="timeline">
+                    <h3>Your Jolts</h3>
+                    <div id="timeline-loading">Loading your sparks...</div>
+                    <div id="user-timeline"></div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box" id="npub-box" style="display: none;">
+                    <h4>Your Public Key (npub)</h4>
+                    <input type="text" id="npub-display" readonly style="width: 100%; font-size: 11px; margin-bottom: 5px;">
+                    <button id="copy-npub-sidebar-btn" class="btn-small">Copy</button>
+                    <p style="font-size: 10px; color: #666; margin-top: 5px;">
+                        Share this key for others to find you on Nostr.
+                    </p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>About Your Profile</h4>
+                    <p>Your public profile. All sparks and profile info are visible to everyone.</p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Privacy Note</h4>
+                    <p>Follower counts are hidden for your mental health. Focus on who you follow, not who follows you.</p>
+                </div>
+                
+                <div class="info-box" id="edit-profile-box" style="display: none;">
+                    <h4>Edit Profile</h4>
+                    <form id="edit-profile-form">
+                        <div class="form-group">
+                            <label>Display Name:</label>
+                            <input type="text" id="edit-name" maxlength="50" placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Bio:</label>
+                            <textarea id="edit-bio" rows="3" maxlength="160" placeholder="About you"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Profile Picture URL:</label>
+                            <input type="text" id="edit-picture" placeholder="https://example.com/avatar.jpg">
+                        </div>
+                        <button type="submit" class="btn-primary">Save Profile</button>
+                    </form>
+                </div>
+                
+                <div class="info-box" id="bg-color-box" style="display: none;">
+                    <h4>Profile Background Color</h4>
+                    <p style="font-size: 11px; margin-bottom: 8px;">Choose a background color for your profile header:</p>
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <input type="color" id="bg-color-picker" value="#ffffff" style="width: 50px; height: 30px; cursor: pointer;">
+                        <button id="save-bg-color-btn" class="btn-small">Save Color</button>
+                    </div>
+                    <p style="font-size: 10px; margin-top: 5px; color: #666;">This will be stored on the Nostr network.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="home.html">Home</a> · 
+            <a href="#about">About</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/profile.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="index.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="index.html">Home</a>
+                <a href="help.html" class="active">Help</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <h2>What is Jolt?</h2>
+                <p>Jolt is a social networking app inspired by 2007 Twitter. Share what you're doing in 140 characters or less!</p>
+                
+                <h3>Getting Started</h3>
+                <p><strong>New users:</strong> Click "Sign Up" to create your account. You'll receive two keys:</p>
+                <ul>
+                    <li><strong>Private key (nsec):</strong> Keep this secret! It's like your password. Never share it.</li>
+                    <li><strong>Public key (npub):</strong> Share this to let people find you.</li>
+                </ul>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li><strong>Post sparks:</strong> Share updates up to 140 characters</li>
+                    <li><strong>Reply:</strong> Respond to others' sparks</li>
+                    <li><strong>Favorite:</strong> Show appreciation with a star</li>
+                    <li><strong>View profiles:</strong> Click any username or avatar</li>
+                    <li><strong>Mentions:</strong> See when others mention you</li>
+                </ul>
+                
+                <h3>What's Nostr?</h3>
+                <p>Jolt is built on Nostr, a decentralized protocol. This means:</p>
+                <ul>
+                    <li>Your data isn't stored on our servers - it's distributed across the network</li>
+                    <li>You can use your Jolt account with other Nostr apps (Damus, Primal, etc.)</li>
+                    <li>No company controls your account - you own your identity</li>
+                </ul>
+                
+                <h3>Privacy & Safety</h3>
+                <ul>
+                    <li>Your private key (nsec) is your identity - keep it safe!</li>
+                    <li>We filter crypto spam and NSFW content by default</li>
+                    <li>Follower counts are hidden for your mental health</li>
+                </ul>
+                
+                <h3>Tips</h3>
+                <ul>
+                    <li>Save your private key somewhere safe - we can't recover it if lost</li>
+                    <li>Check the "Show only Jolt posts" filter to see just our community</li>
+                    <li>Click on sparks to see replies</li>
+                    <li>Update your profile picture and bio in Profile settings</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>Need More Help?</h4>
+                    <p>Join the community and ask questions! We're here to help.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="index.html">Home</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

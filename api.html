@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .api-section {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .api-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #333;
+            border-bottom: 2px solid #9AE4E8;
+            padding-bottom: 5px;
+        }
+        .api-section h4 {
+            font-size: 13px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+        .api-section code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 11px;
+            color: #c7254e;
+        }
+        .api-section pre {
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+        .api-section pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #333;
+        }
+        .api-section ul, .api-section ol {
+            margin-left: 20px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        .api-section li {
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .note-box {
+            background-color: #fffbcc;
+            border-left: 4px solid #ffcc00;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+        .warning-api {
+            background-color: #fff3cd;
+            border-left: 4px solid #ff6600;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo"><a href="index.html">Jolt</a></h1>
+            <div class="header-nav">
+                <a href="index.html">Home</a>
+                <a href="help.html">Help</a>
+                <a href="api.html" class="active">API</a>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <h2>Jolt API Documentation</h2>
+                <p style="margin-bottom: 20px; font-size: 12px; color: #666;">Developer documentation for integrating with Jolt and the Nostr protocol.</p>
+
+                <div class="api-section">
+                    <h3>Overview</h3>
+                    <p>Jolt is a Nostr-based microblogging client. Unlike traditional APIs, Jolt doesn't have a centralized server. Instead, it communicates directly with Nostr relays using the Nostr protocol.</p>
+                    
+                    <div class="note-box">
+                        <strong>Important:</strong> Jolt only displays posts (kind 1 events) that have a <code>client</code> tag set to <code>Jolt</code>. This creates a curated timeline experience similar to early Twitter.
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Nostr Protocol Basics</h3>
+                    <p>Jolt uses the Nostr protocol for all communication:</p>
+                    <ul>
+                        <li><strong>Events:</strong> Everything in Nostr is an event (posts, profiles, reactions)</li>
+                        <li><strong>Keys:</strong> Users have a public key (npub) and private key (nsec)</li>
+                        <li><strong>Relays:</strong> Decentralized servers that store and distribute events</li>
+                        <li><strong>Kinds:</strong> Event types (kind 1 = text note, kind 0 = profile metadata)</li>
+                    </ul>
+                    
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/nostr-protocol/nostr" target="_blank">Nostr Protocol Specification</a></li>
+                        <li><a href="https://github.com/nbd-wtf/nostr-tools" target="_blank">nostr-tools Library</a> (used by Jolt)</li>
+                    </ul>
+                </div>
+
+                <div class="api-section">
+                    <h3>Client Tag Requirement</h3>
+                    <p>For a post to appear in Jolt's timeline, it <strong>must</strong> include a <code>client</code> tag set to <code>Jolt</code>.</p>
+                    
+                    <h4>Example Event Structure</h4>
+                    <pre><code>{
+  "kind": 1,
+  "content": "Hello from Jolt!",
+  "tags": [
+    ["client", "Jolt"]
+  ],
+  "created_at": 1234567890,
+  "pubkey": "user_public_key_hex",
+  "id": "event_id",
+  "sig": "signature"
+}</code></pre>
+
+                    <div class="warning-api">
+                        <strong>⚠️ Filter Behavior:</strong> By default, Jolt filters out:
+                        <ul style="margin-top: 5px;">
+                            <li>Posts without the <code>client: Jolt</code> tag</li>
+                            <li>Posts from the entire Nostr network (unless "Show ALL Nostr posts" is enabled in Settings)</li>
+                            <li>Crypto spam, NSFW content, and other unrelated Nostr traffic</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Default Relays</h3>
+                    <p>Jolt connects to these Nostr relays by default:</p>
+                    <pre><code>wss://relay.damus.io
+wss://relay.nostr.band
+wss://nos.lol
+wss://relay.snort.social
+wss://nostr.wine</code></pre>
+                    <p>Users can add custom relays in Settings → Advanced → Nostr Relays.</p>
+                </div>
+
+                <div class="api-section">
+                    <h3>Publishing Posts to Jolt</h3>
+                    <p>To publish a post that appears in Jolt, use the nostr-tools library:</p>
+                    
+                    <h4>JavaScript Example</h4>
+                    <pre><code>import { SimplePool, finalizeEvent, getPublicKey } from 'nostr-tools';
+
+const pool = new SimplePool();
+const relays = ['wss://relay.damus.io', 'wss://nos.lol'];
+
+const privateKey = 'your_private_key_hex';
+const publicKey = getPublicKey(privateKey);
+
+const event = {
+    kind: 1,
+    content: "Hello from my custom client!",
+    tags: [
+        ["client", "Jolt"]  // Required for Jolt visibility
+    ],
+    created_at: Math.floor(Date.now() / 1000),
+    pubkey: publicKey
+};
+
+const signedEvent = finalizeEvent(event, privateKey);
+await pool.publish(relays, signedEvent);
+
+console.log('Published to Jolt!');</code></pre>
+
+                    <div class="note-box">
+                        <strong>Character Limit:</strong> Jolt enforces a 140-character limit on posts (like early Twitter). Posts longer than 140 characters may be rejected or truncated.
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Querying Jolt Posts</h3>
+                    <p>To fetch posts from Jolt users, query relays with a filter for the <code>client</code> tag:</p>
+                    
+                    <h4>JavaScript Example</h4>
+                    <pre><code>import { SimplePool } from 'nostr-tools';
+
+const pool = new SimplePool();
+const relays = ['wss://relay.damus.io', 'wss://nos.lol'];
+
+const events = await pool.querySync(relays, {
+    kinds: [1],
+    "#client": ["Jolt"],  // Only Jolt posts
+    limit: 50
+});
+
+console.log(`Found ${events.length} Jolt posts`);</code></pre>
+                </div>
+
+                <div class="api-section">
+                    <h3>Image Uploads (NIP-96)</h3>
+                    <p>Jolt uses the <a href="https://github.com/nostr-protocol/nips/blob/master/96.md" target="_blank">NIP-96</a> protocol for image uploads via <code>nostr.build</code>:</p>
+                    
+                    <h4>Image Upload Flow</h4>
+                    <ol>
+                        <li>Upload image to <code>https://nostr.build/api/v2/upload/files</code></li>
+                        <li>Get back image URL and metadata</li>
+                        <li>Create event with <code>imeta</code> tag containing URL and alt text</li>
+                        <li>Publish event with <code>client: Jolt</code> tag</li>
+                    </ol>
+
+                    <h4>Image Event Structure</h4>
+                    <pre><code>{
+  "kind": 1,
+  "content": "Check out this image!",
+  "tags": [
+    ["client", "Jolt"],
+    ["imeta", "url https://nostr.build/i/abc123.jpg", "alt My cool image"]
+  ],
+  "created_at": 1234567890,
+  "pubkey": "user_public_key_hex"
+}</code></pre>
+                </div>
+
+                <div class="api-section">
+                    <h3>Profile Metadata (Kind 0)</h3>
+                    <p>User profiles are stored as kind 0 events with JSON metadata:</p>
+                    
+                    <h4>Profile Event Structure</h4>
+                    <pre><code>{
+  "kind": 0,
+  "content": "{\"name\":\"Alice\",\"about\":\"Jolt user\",\"picture\":\"https://example.com/avatar.jpg\"}",
+  "tags": [],
+  "created_at": 1234567890,
+  "pubkey": "user_public_key_hex"
+}</code></pre>
+                    
+                    <p>Supported profile fields:</p>
+                    <ul>
+                        <li><code>name</code> - Display name (max 50 characters)</li>
+                        <li><code>about</code> - Bio (max 160 characters)</li>
+                        <li><code>picture</code> - Profile picture URL</li>
+                    </ul>
+                </div>
+
+                <div class="api-section">
+                    <h3>REST API Endpoint</h3>
+                    <p>Jolt provides a simple REST API for fetching recent posts:</p>
+                    
+                    <h4>GET /api/spark-posts</h4>
+                    <p>Returns the most recent Jolt posts as JSON.</p>
+                    
+                    <pre><code>curl https://your-jolt-instance.com/api/spark-posts</code></pre>
+                    
+                    <h4>Response Format</h4>
+                    <pre><code>[
+  {
+    "id": "event_id",
+    "content": "Hello from Jolt!",
+    "author": "npub1...",
+    "created_at": 1234567890,
+    "tags": [["client", "Jolt"]]
+  }
+]</code></pre>
+
+                    <div class="note-box">
+                        <strong>Note:</strong> This endpoint only returns posts with the <code>client: Jolt</code> tag. It's primarily used for the public timeline on the login page.
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Integration Examples</h3>
+                    
+                    <h4>Use Cases</h4>
+                    <ul>
+                        <li><strong>Bots:</strong> Create automated accounts that post to Jolt (weather updates, quotes, etc.)</li>
+                        <li><strong>Cross-posting:</strong> Mirror posts from other platforms to Jolt</li>
+                        <li><strong>Analytics:</strong> Track Jolt usage and engagement metrics</li>
+                        <li><strong>Alternative Clients:</strong> Build your own Jolt-compatible client</li>
+                    </ul>
+
+                    <h4>Best Practices</h4>
+                    <ul>
+                        <li>Always include <code>["client", "Jolt"]</code> tag for visibility</li>
+                        <li>Respect the 140-character limit</li>
+                        <li>Cache profile metadata to reduce relay queries</li>
+                        <li>Use multiple relays for redundancy</li>
+                        <li>Never expose or log private keys (nsec)</li>
+                    </ul>
+                </div>
+
+                <div class="api-section">
+                    <h3>Libraries & Tools</h3>
+                    <ul>
+                        <li><strong>JavaScript:</strong> <a href="https://github.com/nbd-wtf/nostr-tools" target="_blank">nostr-tools</a> (used by Jolt)</li>
+                        <li><strong>Python:</strong> <a href="https://github.com/jeffthibault/python-nostr" target="_blank">python-nostr</a></li>
+                        <li><strong>Go:</strong> <a href="https://github.com/nbd-wtf/go-nostr" target="_blank">go-nostr</a></li>
+                        <li><strong>Rust:</strong> <a href="https://github.com/rust-nostr/nostr" target="_blank">nostr-rust</a></li>
+                        <li><strong>Testing:</strong> <a href="https://github.com/hoytech/strfry" target="_blank">strfry</a> (local relay for development)</li>
+                    </ul>
+                </div>
+
+                <div class="api-section">
+                    <h3>Rate Limits & Considerations</h3>
+                    <ul>
+                        <li>No official rate limits (depends on relay policies)</li>
+                        <li>Most relays limit events per second to prevent spam</li>
+                        <li>Some relays require NIP-42 authentication</li>
+                        <li>Image uploads to nostr.build may have size limits (typically 10MB)</li>
+                    </ul>
+                </div>
+
+                <div class="api-section">
+                    <h3>Support & Community</h3>
+                    <p>Need help integrating with Jolt?</p>
+                    <ul>
+                        <li>Check the <a href="help.html">Help page</a> for common questions</li>
+                        <li>Read the <a href="https://github.com/nostr-protocol/nostr" target="_blank">Nostr protocol docs</a></li>
+                        <li>Join Nostr developer communities for technical support</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="info-box">
+                    <h4>Quick Links</h4>
+                    <p style="font-size: 11px;">
+                        <a href="#overview">Overview</a><br>
+                        <a href="https://github.com/nostr-protocol/nostr" target="_blank">Nostr Protocol</a><br>
+                        <a href="https://github.com/nbd-wtf/nostr-tools" target="_blank">nostr-tools</a><br>
+                        <a href="help.html">Help Center</a>
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Getting Started</h4>
+                    <p>New to Nostr development? Start with the <a href="https://github.com/nostr-protocol/nostr" target="_blank">protocol docs</a> and explore example code in the nostr-tools repository.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="index.html">Home</a> · 
+            <a href="help.html">Help</a> · 
+            <a href="api.html">API</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+</body>
+</html>

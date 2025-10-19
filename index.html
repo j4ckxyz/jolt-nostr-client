@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jolt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">Jolt</h1>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="main-content">
+                <div class="welcome-box">
+                    <h2>What are you doing?</h2>
+                    <p class="tagline">Jolt is a decentralized social network built on Nostr protocol.</p>
+                    
+                    <div class="public-timeline">
+                        <h3>Public Timeline</h3>
+                        <div id="timeline-loading">Loading latest sparks...</div>
+                        <div id="public-timeline"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="login-box">
+                    <h3>Login</h3>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="nsec">Private Key (nsec):</label>
+                            <input type="password" id="nsec" name="nsec" placeholder="nsec1..." required>
+                        </div>
+                        <button type="submit" class="btn-primary">Sign in</button>
+                    </form>
+                    <div class="signup-link">
+                        <a href="signup.html">Don't have keys? Sign up →</a>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>About Jolt</h4>
+                    <p>Experience social media like it's 2007, powered by the decentralized Nostr protocol.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="#about">About</a> · 
+            <a href="#help">Help</a> · 
+            <a href="#terms">Terms</a> · 
+            <a href="#privacy">Privacy</a>
+        </div>
+    </div>
+    
+    <script type="module" src="js/nostr.js"></script>
+    <script type="module" src="js/app.js"></script>
+<script type="module">
+import { loadTwemoji } from './js/twemoji-loader.js';
+loadTwemoji();
+</script>
+</body>
+</html>

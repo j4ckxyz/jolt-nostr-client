@@ -1,0 +1,23 @@
+{
+  "name": "jolt",
+  "version": "1.0.0",
+  "description": "A Nostr client styled like 2007 Twitter",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "preview": "python3 -m http.server 8000",
+    "server": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "nostr",
+    "social-network",
+    "decentralized",
+    "twitter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "nostr-tools": "^2.7.2"
+  }
+}
