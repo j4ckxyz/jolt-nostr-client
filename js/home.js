@@ -372,6 +372,27 @@ function extractMediaFromEvent(event, settings = {}) {
 async function loadTimeline() {
     document.getElementById('timeline-loading').textContent = 'Loading sparks...';
     
+    try {
+        const response = await fetch('/api/spark-posts');
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`Loaded ${data.posts.length} cached Jolt/Chirp posts from server`);
+            
+            data.posts.forEach(event => {
+                if (shouldDisplayEvent(event, filterSettings)) {
+                    if (currentTab === 'following' && !userFollowList.includes(event.pubkey)) {
+                        return;
+                    }
+                    displayNote(event);
+                }
+            });
+            
+            document.getElementById('timeline-loading').style.display = 'none';
+        }
+    } catch (error) {
+        console.log('Server cache not available, loading from relays:', error);
+    }
+    
     subscription = await subscribeToNotes((event) => {
         if (shouldDisplayEvent(event, filterSettings)) {
             if (currentTab === 'following' && !userFollowList.includes(event.pubkey)) {

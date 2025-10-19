@@ -104,7 +104,7 @@ export function getClientFromEvent(event) {
 
 export function isFromJoltClient(event) {
     const client = getClientFromEvent(event);
-    return client === CHIRP_CLIENT_TAG;
+    return client === CHIRP_CLIENT_TAG || client === 'Chirp';
 }
 
 export function isReply(event) {

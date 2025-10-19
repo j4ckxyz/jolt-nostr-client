@@ -132,19 +132,19 @@ async function fetchJoltPosts() {
         const events = await pool.querySync(RELAYS, {
             kinds: [1],
             since: ONE_MONTH_AGO,
-            limit: 1000
+            limit: 2000
         });
         
-        const joltEvents = events.filter(event => {
+        const joltAndChirpEvents = events.filter(event => {
             if (!event.tags) return false;
-            const hasJoltTag = event.tags.some(tag => 
+            const hasClientTag = event.tags.some(tag => 
                 Array.isArray(tag) && 
                 tag.length >= 2 && 
                 tag[0] === 'client' && 
-                tag[1] === 'Jolt'
+                (tag[1] === 'Jolt' || tag[1] === 'Chirp')
             );
             
-            if (!hasJoltTag) return false;
+            if (!hasClientTag) return false;
             
             const isReply = event.tags.some(tag => 
                 Array.isArray(tag) && 
@@ -154,11 +154,13 @@ async function fetchJoltPosts() {
             return !isReply;
         });
         
-        joltEvents.sort((a, b) => b.created_at - a.created_at);
-        joltPostsCache = joltEvents.slice(0, 100);
+        joltAndChirpEvents.sort((a, b) => b.created_at - a.created_at);
+        joltPostsCache = joltAndChirpEvents.slice(0, 200);
         lastCacheUpdate = Date.now();
         
-        console.log(`Fetched ${events.length} total posts from last month, found ${joltEvents.length} Jolt posts (non-replies), cached ${joltPostsCache.length}`);
+        const joltCount = joltAndChirpEvents.filter(e => e.tags.some(t => t[0] === 'client' && t[1] === 'Jolt')).length;
+        const chirpCount = joltAndChirpEvents.filter(e => e.tags.some(t => t[0] === 'client' && t[1] === 'Chirp')).length;
+        console.log(`Fetched ${events.length} total posts from last month, found ${joltCount} Jolt + ${chirpCount} Chirp posts (non-replies), cached ${joltPostsCache.length}`);
         return joltPostsCache;
     } catch (error) {
         console.error('Error fetching Jolt posts:', error);

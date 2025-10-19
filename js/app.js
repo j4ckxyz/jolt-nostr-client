@@ -80,19 +80,24 @@ async function loadTimeline() {
         const response = await fetch('/api/spark-posts');
         if (response.ok) {
             const data = await response.json();
-            console.log(`Loaded ${data.posts.length} cached Jolt posts`);
+            console.log(`Loaded ${data.posts.length} cached Jolt/Chirp posts from server`);
             
             data.posts.forEach(event => {
-                if (shouldDisplayEvent(event, filterSettings)) {
-                    displayNote(event);
-                }
+                displayNote(event);
             });
             
             document.getElementById('timeline-loading').style.display = 'none';
+            
+            subscription = await subscribeToNotes((event) => {
+                if (shouldDisplayEvent(event, filterSettings)) {
+                    displayNote(event);
+                }
+            }, 100);
+            
             return;
         }
     } catch (error) {
-        console.log('Cache not available, loading from relays:', error);
+        console.log('Server cache not available, loading directly from relays:', error);
     }
     
     subscription = await subscribeToNotes((event) => {
